@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Expired Drugs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            background-color: #34495e;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #1abc9c;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: #ecf0f1;
+        }
+
+        .main-content h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn-submit {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: #27ae60;
+        }
+
+        /* Style for expired medicines history */
+        .expired-history {
+            margin-top: 40px;
+        }
+
+        .expired-history h2 {
+            margin-bottom: 20px;
+        }
+
+        .expired-history ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .expired-history ul li {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-pdf {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-pdf:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Pharmacist</h2>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="pharmacy-stock.html">Pharmacy Stock</a></li>
+            <li><a href="medicine-list.html">Medicine List</a></li>
+            <li><a href="ai.html">Sales</a></li>
+            <li><a href="suppliers.html">Suppliers</a></li>
+            <li><a href="expired-drugs.html">Manage Expired Drugs</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>Manage Expired Drugs</h1>
+        <form id="expired-drug-form">
+            <div class="form-group">
+                <label for="medicine-name">Medicine Name</label>
+                <input type="text" id="medicine-name" placeholder="Enter the medicine name" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry-date">Expiry Date</label>
+                <input type="date" id="expiry-date" required>
+            </div>
+            <button type="submit" class="btn-submit">Add Expired Medicine</button>
+        </form>
+        <div class="message" id="message"></div>
+
+        <!-- Expired Medicines History -->
+        <div class="expired-history">
+            <h2>Expired Medicines History</h2>
+            <ul id="expired-history-list"></ul>
+            <button class="btn-pdf" id="generate-pdf">Download PDF</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const expiredMedicineHistory = JSON.parse(localStorage.getItem('expiredMedicineHistory')) || [];
+
+        // Event listener for form submission
+        document.getElementById('expired-drug-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const medicineName = document.getElementById('medicine-name').value;
+            const expiryDate = document.getElementById('expiry-date').value;
+
+            expiredMedicineHistory.push({ medicineName, expiryDate });
+
+            // Store the updated history in localStorage
+            localStorage.setItem('expiredMedicineHistory', JSON.stringify(expiredMedicineHistory));
+
+            // Update message and clear form
+            document.getElementById('message').textContent = `${medicineName} added as expired on ${expiryDate}.`;
+            document.getElementById('expired-drug-form').reset();
+
+            // Update the expired medicine history list
+            updateExpiredHistory();
+        });
+
+        // Function to update the expired history list on the page
+        function updateExpiredHistory() {
+            const historyList = document.getElementById('expired-history-list');
+            historyList.innerHTML = '';
+
+            expiredMedicineHistory.forEach((medicine, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. Medicine: ${medicine.medicineName}, Expiry Date: ${medicine.expiryDate}`;
+                historyList.appendChild(li);
+            });
+        }
+
+        // Function to generate PDF
+        document.getElementById('generate-pdf').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text('Expired Medicines History', 10, 10);
+
+            let yOffset = 20;
+            expiredMedicineHistory.forEach((medicine, index) => {
+                doc.setFontSize(12);
+                doc.text(`${index + 1}. Medicine: ${medicine.medicineName}, Expiry Date: ${medicine.expiryDate}`, 10, yOffset);
+                yOffset += 10;
+            });
+
+            doc.save('expired-medicines-history.pdf');
+        });
+
+        // Load expired medicine history on page load
+        window.addEventListener('load', function() {
+            updateExpiredHistory();
+        });
+    </script>
+
+</body>
+</html>

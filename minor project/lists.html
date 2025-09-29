@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        thead {
+            background-color: #333;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            text-transform: uppercase;
+        }
+
+        .update-btn, .add-btn {
+            background-color: #00b4b4;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-btn:hover, .add-btn:hover {
+            background-color: #009090;
+        }
+
+        .add-btn {
+            float: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Medicine List</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>S.N</th>
+                    <th>Medicine Info</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="row-1">
+                    <td>1</td>
+                    <td>
+                        <strong>MID: 1</strong><br>
+                        Name: Brufen 10<br>
+                        Expiry Date: 2023-06-15
+                    </td>
+                    <td>tablet</td>
+                    <td class="price">25</td>
+                    <td><button class="update-btn" onclick="updatePrice(1)">Update Price</button></td>
+                </tr>
+                <tr id="row-2">
+                    <td>2</td>
+                    <td>
+                        <strong>MID: 2</strong><br>
+                        Name: Piliton 50mg<br>
+                        Expiry Date: 2023-06-15
+                    </td>
+                    <td>tablet</td>
+                    <td class="price">500</td>
+                    <td><button class="update-btn" onclick="updatePrice(2)">Update Price</button></td>
+                </tr>
+                <tr id="row-3">
+                    <td>3</td>
+                    <td>
+                        <strong>MID: 3</strong><br>
+                        Name: Cetrizin 50mg<br>
+                        Expiry Date: 2023-10-19
+                    </td>
+                    <td>tablet</td>
+                    <td class="price">25</td>
+                    <td><button class="update-btn" onclick="updatePrice(3)">Update Price</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function updatePrice(id) {
+            // Get the corresponding row by ID
+            const row = document.getElementById(`row-${id}`);
+            // Get the price cell within that row
+            const priceCell = row.querySelector('.price');
+            
+            // Prompt the user for a new price
+            const newPrice = prompt('Enter the new price for medicine ID ' + id + ':', priceCell.textContent);
+
+            // If the user entered a valid number, update the price
+            if (newPrice !== null && newPrice.trim() !== '' && !isNaN(newPrice)) {
+                priceCell.textContent = newPrice.trim();
+            } else {
+                alert('Please enter a valid price.');
+            }
+        }
+    </script>
+
+</body>
+</html>

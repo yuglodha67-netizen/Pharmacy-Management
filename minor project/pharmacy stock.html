@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medicine Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .form-container {
+            width: 500px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 22px;
+        }
+
+        .form-container p {
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus {
+            border-color: #3498db;
+        }
+
+        .form-group .radio-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group .radio-group label {
+            margin-right: 20px;
+            color: #333;
+        }
+
+        .form-group .radio-group input {
+            margin-right: 5px;
+        }
+
+        .submit-btn {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Add Medicine</h2>
+        <p>Use this form to Add Medicine</p>
+
+        <div class="form-group">
+            <label for="medicineName">Medicine Name</label>
+            <input type="text" id="medicineName" placeholder="Enter Medicine Name">
+        </div>
+
+        <div class="form-group">
+            <label for="medicineType">Medicine Type</label>
+            <input type="text" id="medicineType" placeholder="Enter Medicine Type e.g Tablet">
+        </div>
+
+        <div class="form-group">
+            <label for="capacity">Capacity</label>
+            <input type="text" id="capacity" placeholder="Enter the capacity of the item e.g. 250gms">
+        </div>
+
+        <div class="form-group">
+            <label>The medicine is sold as a dose</label>
+            <div class="radio-group">
+                <label><input type="radio" name="dose" value="yes"> Yes</label>
+                <label><input type="radio" name="dose" value="no"> No</label>
+            </div>
+        </div>
+
+        <button class="submit-btn">Submit</button>
+    </div>
+
+    <script>
+        document.querySelector('.submit-btn').addEventListener('click', function() {
+            const medicineName = document.getElementById('medicineName').value;
+            const medicineType = document.getElementById('medicineType').value;
+            const capacity = document.getElementById('capacity').value;
+            const isDose = document.querySelector('input[name="dose"]:checked') ? document.querySelector('input[name="dose"]:checked').value : null;
+
+            // Simple validation for the form
+            if (!medicineName || !medicineType || !capacity || !isDose) {
+                alert('Please fill out all fields.');
+            } else {
+                // Store the data in local storage
+                const medicineList = JSON.parse(localStorage.getItem('medicineList')) || [];
+                const newMedicine = {
+                    id: medicineList.length + 1,
+                    name: medicineName,
+                    type: medicineType,
+                    capacity: capacity,
+                    dose: isDose
+                };
+                medicineList.push(newMedicine);
+                localStorage.setItem('medicineList', JSON.stringify(medicineList));
+
+                // Redirect to the medicine list page
+                window.location.href = 'medicine-list.html';
+            }
+        });
+    </script>
+</body>
+</html>

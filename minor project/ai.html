@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Medicine Ordering System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #000000;
+        }
+        .container {        
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .medicine {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .medicine input {
+            width: 60px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2> Medicine Ordering System</h2>
+
+        <!-- Medicine A -->
+        <div class="medicine">
+            <span>Medicine A</span>
+            <span>
+                Stock: 
+                <input type="number" id="medicineA-stock" value="100" readonly>
+            </span>
+            <button id="medicineA-consume" onclick="useMedicine('A')">Use Medicine</button>
+        </div>
+
+        <!-- Medicine B -->
+        <div class="medicine">
+            <span>Medicine B</span>
+            <span>
+                Stock: 
+                <input type="number" id="medicineB-stock" value="100" readonly>
+            </span>
+            <button id="medicineB-consume" onclick="useMedicine('B')">Use Medicine</button>
+        </div>
+
+        <!-- Input for Consumption Amount -->
+        <div class="medicine">
+            <span>Enter Amount of Medicine Used</span>
+            <span>
+                <input type="number" id="medicineUsed" value="0">
+            </span>
+        </div>
+
+        <!-- Input for Reorder Quantity -->
+        <div class="medicine">
+            <span>Reorder Quantity</span>
+            <span>
+                <input type="number" id="reorderQuantity" value="100">
+            </span>
+        </div>
+
+        <!-- Status Message -->
+        <p class="status" id="statusMessage"></p>
+    </div>
+
+    <script>
+        // Global stock thresholds and initial stock values
+        const threshold = 10;
+
+        // Function to simulate medicine usage and check stock
+        function useMedicine(medicine) {
+            let stockInput = document.getElementById(`medicine${medicine}-stock`);
+            let stock = parseInt(stockInput.value); // Get current stock
+            let medicineUsed = parseInt(document.getElementById('medicineUsed').value); // Get the amount of medicine used
+            let reorderQuantity = parseInt(document.getElementById('reorderQuantity').value); // Get reorder quantity
+
+            // Check if the user is trying to consume more than available stock
+            if (medicineUsed > stock) {
+                document.getElementById("statusMessage").innerText = `Cannot use ${medicineUsed} units. Only ${stock} units are available for Medicine ${medicine}.`;
+                return;
+            }
+
+            // Reduce stock by the amount used
+            stock -= medicineUsed;
+            stockInput.value = stock; // Update the stock in the input field
+
+            // Check if the stock is below the threshold
+            if (stock < threshold) {
+                stock += reorderQuantity; // Add the reorder quantity
+                stockInput.value = stock; // Update the stock in the input field
+                document.getElementById("statusMessage").innerText = `Stock of Medicine ${medicine} was below ${threshold}. Ordered ${reorderQuantity} more units. New stock: ${stock}.`;
+            } else {
+                document.getElementById("statusMessage").innerText = `Stock of Medicine ${medicine} is sufficient. Current stock: ${stock}.`;
+            }
+        }
+    </script>
+
+</body>
+</html>

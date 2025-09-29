@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            background-color: #34495e;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #1abc9c;
+        }
+
+        .dashboard {
+            flex: 1;
+            padding: 30px;
+            background-color: #ecf0f1;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .widgets {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .widget {
+            width: 23%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .widget h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .widget .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .widget.expired {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .widget .btn {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .widget .btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Pharmacist</h2>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="pharmacy stock.html">Pharmacy Stock</a></li>
+            <li><a href="medicine-list.html">Medicine List</a></li>
+            <li><a href="ai.html">Sales</a></li>
+            <li><a href="sellers.html">Suppliers</a></li>
+            <li><a href="invoice.html">Invoice</a></li>
+        </ul>
+    </div>
+
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <div class="widgets">
+            <div class="widget">
+                <h3>Pharmacy Year</h3>
+                <div class="value">01-07-2024<br> to <br>01-09-2024</div>
+            </div>
+            <div class="widget">
+                <h3>Medicine Sales</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="widget">
+                <h3>Medicine List</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="widget expired">
+                <h3><a href="expired-drugs.html" style="color: white; text-decoration: none;">Expired Drugs</a></h3>
+                <div class="value">0</div>
+            </div>
+            <div class="widget">
+                <h3>Opening Balance</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="widget">
+                <h3>Account Payable</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="widget">
+                <h3>Items List</h3>
+                <div class="value">3
+                </div>
+            </div>
+            <div class="widget">
+                <h3>Transaction Today</h3>
+                <div class="value">0</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

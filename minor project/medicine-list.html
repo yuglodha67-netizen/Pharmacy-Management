@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: left;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        thead {
+            background-color: #333;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            text-transform: uppercase;
+        }
+
+        .update-btn, .add-btn, .delete-btn {
+            background-color: #00b4b4;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-btn:hover, .add-btn:hover, .delete-btn:hover {
+            background-color: #009090;
+        }
+
+        .add-btn {
+            float: right;
+            margin-top: 10px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Medicine List</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>S.N</th>
+                    <th>Medicine Info</th>
+                    <th>Type</th>
+                    <th>Capacity</th>
+                    <th>Sold as Dose</th>
+                    <th>Price (INR)</th> <!-- Changed Price column to INR -->
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="medicine-list">
+                <!-- Dynamic content will be inserted here -->
+            </tbody>
+        </table>
+        <button class="add-btn" onclick="window.location.href='add-medicine.html'">Add New Medicine</button>
+    </div>
+
+    <script>
+        function loadMedicineList() {
+            const medicineList = JSON.parse(localStorage.getItem('medicineList')) || [];
+            const medicineListTable = document.getElementById('medicine-list');
+
+            medicineListTable.innerHTML = '';
+            medicineList.forEach((medicine, index) => {
+                const row = `
+                    <tr id="row-${medicine.id}">
+                        <td>${index + 1}</td>
+                        <td><strong>MID: ${medicine.id}</strong><br>Name: ${medicine.name}</td>
+                        <td>${medicine.type}</td>
+                        <td>${medicine.capacity}</td>
+                        <td>${medicine.dose}</td>
+                        <td class="price" id="price-${medicine.id}">₹${medicine.price || 0}</td> <!-- INR currency display -->
+                        <td>
+                            <button class="update-btn" onclick="updatePrice(${medicine.id})">Update Price</button>
+                            <button class="delete-btn" onclick="deleteMedicine(${medicine.id})">Delete</button> <!-- Delete Button -->
+                        </td>
+                    </tr>
+                `;
+                medicineListTable.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function updatePrice(id) {
+            // Prompt the user for a new price in INR
+            const newPrice = prompt('Enter the new price in INR for medicine ID ' + id + ':');
+            // If the user entered a valid number, update the price
+            if (newPrice !== null && newPrice.trim() !== '' && !isNaN(newPrice)) {
+                // Update the price in the displayed row
+                document.getElementById(`price-${id}`).textContent = `₹${parseFloat(newPrice).toFixed(2)}`;
+
+                // Update the local storage data
+                const medicineList = JSON.parse(localStorage.getItem('medicineList')) || [];
+                const medicine = medicineList.find(med => med.id === id);
+                if (medicine) {
+                    medicine.price = parseFloat(newPrice); // Update the price in local storage
+                    localStorage.setItem('medicineList', JSON.stringify(medicineList));
+                }
+
+                alert('Price updated for Medicine ID ' + id);
+            } else {
+                alert('Please enter a valid price.');
+            }
+        }
+
+        function deleteMedicine(id) {
+            // Confirm deletion
+            if (confirm('Are you sure you want to delete medicine ID ' + id + '?')) {
+                // Remove from local storage
+                let medicineList = JSON.parse(localStorage.getItem('medicineList')) || [];
+                medicineList = medicineList.filter(medicine => medicine.id !== id);
+                localStorage.setItem('medicineList', JSON.stringify(medicineList));
+
+                // Remove the row from the table
+                const row = document.getElementById(`row-${id}`);
+                if (row) {
+                    row.remove();
+                }
+
+                alert('Medicine ID ' + id + ' has been deleted.');
+            }
+        }
+
+        // Load the medicine list on page load
+        window.onload = loadMedicineList;
+    </script>
+</body>
+</html>
